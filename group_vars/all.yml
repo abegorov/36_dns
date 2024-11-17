@@ -1,0 +1,14 @@
+---
+bind_rndc_users: [vagrant]
+
+bind_profile: named
+bind_listen_on: '{{ ip }}'
+bind_recursion: true
+bind_rndc_control: '{{ ip }}'
+bind_rndc_allow: '{{ hostvars["client"].ip }}'
+
+resolv_domain: dns.lab
+resolv_search: '{{ resolv_domain }}'
+resolv_nameservers:
+  - '{{ hostvars["ns01"].ip }}'
+  - '{{ hostvars["ns02"].ip }}'

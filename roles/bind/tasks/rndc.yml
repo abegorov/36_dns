@@ -1,0 +1,17 @@
+---
+- name: Add users to the named group
+  ansible.builtin.user:
+    name: '{{ item }}'
+    groups: named
+    append: true
+  loop: '{{ bind_rndc_users }}'
+
+- name: Update rndc-key
+  ansible.builtin.template:
+    src: rndc.key
+    dest: /etc/rndc.key
+    owner: root
+    group: named
+    mode: '0640'
+  no_log: true
+  notify: Reload service named

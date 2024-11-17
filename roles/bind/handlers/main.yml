@@ -1,0 +1,6 @@
+---
+- name: Reload service named
+  ansible.builtin.systemd_service:
+    name: named.service
+    state: reloaded
+  ignore_errors: '{{ ansible_check_mode }}'

@@ -1,0 +1,31 @@
+---
+- name: Install bind
+  ansible.builtin.dnf:
+    name:
+      - bind
+      - bind-utils
+      - chrony
+
+- name: Enable and start service chronyd
+  ansible.builtin.systemd_service:
+    name: chronyd.service
+    enabled: true
+    state: started
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: Include rndc tasks
+  ansible.builtin.include_tasks: rndc.yml
+
+- name: Update zonetransfer-key
+  ansible.builtin.template:
+    src: zonetransfer.key
+    dest: /etc/named/zonetransfer.key
+    owner: root
+    group: named
+    mode: '0640'
+  no_log: true
+  notify: Reload service named
+
+- name: Include bind tasks
+  ansible.builtin.include_tasks: bind.yml
+  when: bind_profile

@@ -1,0 +1,16 @@
+---
+ip: '192.168.50.11'
+bind_zonetransfer_servers: ['{{ hostvars["ns01"].ip }}']
+bind_zones:
+  dns.lab:
+    type: slave
+    masters: '{{ hostvars["ns01"].ip }}'
+    template: dns.lab
+  50.168.192.in-addr.arpa:
+    type: slave
+    masters: '{{ hostvars["ns01"].ip }}'
+    template: 50.168.192.in-addr.arpa
+  ddns.lab:
+    type: slave
+    masters: '{{ hostvars["ns01"].ip }}'
+    template: ddns.lab

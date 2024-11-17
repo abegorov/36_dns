@@ -1,0 +1,37 @@
+---
+- name: Configure bind zones
+  vars:
+    dynamic: '{{ item.value.allow_update | default(False) }}'
+  ansible.builtin.template:
+    src: 'zones/{{ item.value.template }}'
+    dest: /var/named/{{ "dynamic" if dynamic else "data" }}/{{ item.key }}
+    lstrip_blocks: true
+    force: '{{ not dynamic }}'
+    owner: named
+    group: named
+    mode: '0660'
+  when:
+    - item.value.type == 'master'
+    - item.value.template
+  notify: Reload service named
+  loop: '{{ bind_zones | ansible.builtin.dict2items }}'
+  loop_control:
+    label: '{{ item.key }}'
+
+- name: Configure bind
+  ansible.builtin.template:
+    src: '{{ bind_profile }}.conf'
+    dest: /etc/named.conf
+    lstrip_blocks: true
+    owner: root
+    group: named
+    mode: '0640'
+    validate: /usr/sbin/named-checkconf -z %s
+  notify: Reload service named
+
+- name: Enable and start service named
+  ansible.builtin.systemd_service:
+    name: named.service
+    enabled: true
+    state: started
+  ignore_errors: '{{ ansible_check_mode }}'

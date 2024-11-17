@@ -1,0 +1,5 @@
+---
+ip: '192.168.50.15'
+
+bind_profile:
+motd_profile: dns.lab

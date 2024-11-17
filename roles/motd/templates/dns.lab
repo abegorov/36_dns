@@ -1,0 +1,18 @@
+### Welcome to the DNS lab! ###
+
+- Use this client to test the enviroment, with dig or nslookup.
+    dig @{{ hostvars["ns01"].ip }} ns01.dns.lab
+    dig @{{ hostvars["ns02"].ip }} -x {{ hostvars["ns01"].ip }}
+
+- nsupdate is available in the ddns.lab zone. Ex:
+    nsupdate -k /etc/named/zonetransfer.key
+    server {{ hostvars["ns01"].ip }}
+    zone ddns.lab
+    update add www.ddns.lab. 60 A 192.168.50.15
+    send
+
+- rndc is also available to manage the servers
+    rndc -s {{ hostvars["ns01"].ip }} reload
+    rndc -s {{ hostvars["ns02"].ip }} reload
+
+Enjoy!
