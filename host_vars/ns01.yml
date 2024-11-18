@@ -27,7 +27,7 @@ bind_views:
       ddns.lab:
         type: secondary
         allow_notify: [client1]
-        allow_update_forwarding: [client1, client2]
+        allow_update_forwarding: [client1]
         primaries: ['127.0.0.1']
   client2:
     match_clients: client2
@@ -43,7 +43,7 @@ bind_views:
       ddns.lab:
         type: secondary
         allow_notify: [client2]
-        allow_update_forwarding: [client1, client2]
+        allow_update_forwarding: [client2]
         primaries: ['127.0.0.1']
   default:
     zones:

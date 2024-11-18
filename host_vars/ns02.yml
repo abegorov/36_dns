@@ -20,6 +20,7 @@ bind_views:
       ddns.lab:
         type: secondary
         allow_notify: [client1]
+        allow_update_forwarding: [client1]
         primaries: ['{{ hostvars["ns01"].ip }}']
   client2:
     match_clients: client2
@@ -35,6 +36,7 @@ bind_views:
       ddns.lab:
         type: secondary
         allow_notify: [client2]
+        allow_update_forwarding: [client2]
         primaries: ['{{ hostvars["ns01"].ip }}']
   default:
     zones:
