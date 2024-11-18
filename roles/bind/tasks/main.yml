@@ -16,15 +16,8 @@
 - name: Include rndc tasks
   ansible.builtin.include_tasks: rndc.yml
 
-- name: Update zonetransfer-key
-  ansible.builtin.template:
-    src: zonetransfer.key
-    dest: /etc/named/zonetransfer.key
-    owner: root
-    group: named
-    mode: '0640'
-  no_log: true
-  notify: Reload service named
+- name: Include keys tasks
+  ansible.builtin.include_tasks: keys.yml
 
 - name: Include bind tasks
   ansible.builtin.include_tasks: bind.yml

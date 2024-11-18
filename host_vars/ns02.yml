@@ -1,16 +1,52 @@
 ---
 ip: '192.168.50.11'
-bind_zonetransfer_servers: ['{{ hostvars["ns01"].ip }}']
-bind_zones:
-  dns.lab:
-    type: slave
-    masters: '{{ hostvars["ns01"].ip }}'
-    template: dns.lab
-  50.168.192.in-addr.arpa:
-    type: slave
-    masters: '{{ hostvars["ns01"].ip }}'
-    template: 50.168.192.in-addr.arpa
-  ddns.lab:
-    type: slave
-    masters: '{{ hostvars["ns01"].ip }}'
-    template: ddns.lab
+bind_servers: ['{{ hostvars["ns01"].ip }}']
+bind_views:
+  client1:
+    match_clients: client1
+    zones:
+      dns.lab:
+        type: secondary
+        allow_notify: [client1]
+        primaries: ['{{ hostvars["ns01"].ip }} key "client1-key"']
+      newdns.lab:
+        type: secondary
+        allow_notify: [client1]
+        primaries: ['{{ hostvars["ns01"].ip }}']
+      50.168.192.in-addr.arpa:
+        type: secondary
+        allow_notify: [client1]
+        primaries: ['{{ hostvars["ns01"].ip }}']
+      ddns.lab:
+        type: secondary
+        allow_notify: [client1]
+        primaries: ['{{ hostvars["ns01"].ip }}']
+  client2:
+    match_clients: client2
+    zones:
+      dns.lab:
+        type: secondary
+        allow_notify: [client2]
+        primaries: ['{{ hostvars["ns01"].ip }}']
+      50.168.192.in-addr.arpa:
+        type: secondary
+        allow_notify: [client2]
+        primaries: ['{{ hostvars["ns01"].ip }}']
+      ddns.lab:
+        type: secondary
+        allow_notify: [client2]
+        primaries: ['{{ hostvars["ns01"].ip }}']
+  default:
+    zones:
+      dns.lab:
+        type: secondary
+        primaries: ['{{ hostvars["ns01"].ip }}']
+      newdns.lab:
+        type: secondary
+        primaries: ['{{ hostvars["ns01"].ip }}']
+      50.168.192.in-addr.arpa:
+        type: secondary
+        primaries: ['{{ hostvars["ns01"].ip }}']
+      ddns.lab:
+        type: secondary
+        primaries: ['{{ hostvars["ns01"].ip }}']

@@ -8,10 +8,11 @@
 
 - name: Update rndc-key
   ansible.builtin.template:
-    src: rndc.key
+    src: '{{ bind_rndc_key_template }}.key'
     dest: /etc/rndc.key
     owner: root
     group: named
     mode: '0640'
   no_log: true
   notify: Reload service named
+  loop: [rndc]

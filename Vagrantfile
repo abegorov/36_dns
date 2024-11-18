@@ -14,7 +14,8 @@ DEFAULT_MACHINE = {
 MACHINES = {
   :'ns01' => { :intnets => { :dns => { ip: '192.168.50.10' } } },
   :'ns02' => { :intnets => { :dns => { ip: '192.168.50.11' } } },
-  :'client' => { :intnets => { :dns => { ip: '192.168.50.15' } } },
+  :'client1' => { :intnets => { :dns => { ip: '192.168.50.15' } } },
+  :'client2' => { :intnets => { :dns => { ip: '192.168.50.16' } } },
 }
 
 Vagrant.configure("2") do |config|

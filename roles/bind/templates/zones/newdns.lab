@@ -1,20 +1,20 @@
 $TTL 3600
-$ORIGIN dns.lab.
-@               IN      SOA     ns01.dns.lab. root.dns.lab. (
-                            2024111801 ; serial
+$ORIGIN newdns.lab.
+@               IN      SOA     ns01.newdns.lab. root.dns.lab. (
+                            2024111800 ; serial
                             3600       ; refresh (1 hour)
                             600        ; retry (10 minutes)
                             86400      ; expire (1 day)
                             600        ; minimum (10 minutes)
                         )
 
-                IN      NS      ns01.dns.lab.
-                IN      NS      ns02.dns.lab.
+                IN      NS      ns01.newdns.lab.
+                IN      NS      ns02.newdns.lab.
 
 ; DNS Servers
 ns01            IN      A       {{ hostvars["ns01"].ip }}
 ns02            IN      A       {{ hostvars["ns02"].ip }}
 
 ; Web Servers
-web1            IN      A       {{ hostvars["client1"].ip }}
-web2            IN      A       {{ hostvars["client2"].ip }}
+www             IN      A       {{ hostvars["client1"].ip }}
+www             IN      A       {{ hostvars["client2"].ip }}

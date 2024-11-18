@@ -1,22 +1,27 @@
 ---
-- name: Configure bind zones
-  vars:
-    dynamic: '{{ item.value.allow_update | default(False) }}'
+- name: Configure bind static zones
   ansible.builtin.template:
-    src: 'zones/{{ item.value.template }}'
-    dest: /var/named/{{ "dynamic" if dynamic else "data" }}/{{ item.key }}
+    src: 'zones/{{ item }}'
+    dest: /var/named/data/{{ item }}
     lstrip_blocks: true
-    force: '{{ not dynamic }}'
+    force: true
     owner: named
     group: named
     mode: '0660'
-  when:
-    - item.value.type == 'master'
-    - item.value.template
   notify: Reload service named
-  loop: '{{ bind_zones | ansible.builtin.dict2items }}'
-  loop_control:
-    label: '{{ item.key }}'
+  loop: '{{ bind_static_zone_templates }}'
+
+- name: Configure bind dynamic zones
+  ansible.builtin.template:
+    src: 'zones/{{ item }}'
+    dest: /var/named/dynamic/{{ item }}
+    lstrip_blocks: true
+    force: false
+    owner: named
+    group: named
+    mode: '0660'
+  notify: Reload service named
+  loop: '{{ bind_dynamic_zone_templates }}'
 
 - name: Configure bind
   ansible.builtin.template:

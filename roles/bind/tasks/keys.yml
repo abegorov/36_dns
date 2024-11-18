@@ -1,0 +1,22 @@
+---
+- name: Update server keys
+  ansible.builtin.template:
+    src: '{{ bind_server_keys_template }}.key'
+    dest: /etc/named/{{ item }}.key
+    owner: root
+    group: named
+    mode: '0640'
+  no_log: true
+  notify: Reload service named
+  loop: '{{ bind_server_keys }}'
+
+- name: Update client keys
+  ansible.builtin.template:
+    src: '{{ bind_client_keys_template }}.key'
+    dest: /etc/named/{{ item }}.key
+    owner: root
+    group: named
+    mode: '0640'
+  no_log: true
+  notify: Reload service named
+  loop: '{{ bind_client_keys }}'

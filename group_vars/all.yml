@@ -1,12 +1,22 @@
 ---
 bind_rndc_users: [vagrant]
 
-bind_profile: named
-bind_listen_on: '{{ ip }}'
+bind_listen_on: ['{{ ip }}']
 bind_recursion: true
-bind_rndc_control: '{{ ip }}'
-bind_rndc_allow: '{{ hostvars["client"].ip }}'
-
+bind_allow_query: '127.0.0.1; 192.168.50.0/24'
+bind_rndc_control: ['{{ ip }}']
+bind_rndc_allow:
+  - '{{ hostvars["client1"].ip }}'
+  - '{{ hostvars["client2"].ip }}'
+bind_client_keys: [client1, client2]
+bind_server_keys: [ns01, ns02]
+bind_acls:
+  client1:
+    - key client1-key
+    - '{{ hostvars["client1"].ip }}'
+  client2:
+    - key client2-key
+    - '{{ hostvars["client2"].ip }}'
 resolv_domain: dns.lab
 resolv_search: '{{ resolv_domain }}'
 resolv_nameservers:

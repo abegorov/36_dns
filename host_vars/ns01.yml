@@ -1,17 +1,82 @@
 ---
 ip: '192.168.50.10'
-bind_zonetransfer_servers: ['{{ hostvars["ns02"].ip }}']
-bind_zones:
-  dns.lab:
-    type: master
-    allow_transfer: true
-    template: dns.lab
-  50.168.192.in-addr.arpa:
-    type: master
-    allow_transfer: true
-    template: 50.168.192.in-addr.arpa
-  ddns.lab:
-    type: master
-    allow_transfer: true
-    allow_update: true
-    template: ddns.lab
+bind_servers: ['{{ hostvars["ns02"].ip }}']
+bind_static_zone_templates:
+  - dns.lab
+  - client1@dns.lab
+  - newdns.lab
+  - 50.168.192.in-addr.arpa
+bind_dynamic_zone_templates: [ddns.lab]
+bind_views:
+  client1:
+    match_clients: client1
+    zones:
+      dns.lab:
+        type: primary
+        allow_transfer: ['client1']
+        also_nofity: ['{{ hostvars["ns02"].ip }} key "client1-key"']
+        template: client1@dns.lab
+      newdns.lab:
+        type: secondary
+        allow_notify: [client1]
+        primaries: ['127.0.0.1']
+      50.168.192.in-addr.arpa:
+        type: secondary
+        allow_notify: [client1]
+        primaries: ['127.0.0.1']
+      ddns.lab:
+        type: secondary
+        allow_notify: [client1]
+        allow_update_forwarding: [client1, client2]
+        primaries: ['127.0.0.1']
+  client2:
+    match_clients: client2
+    zones:
+      dns.lab:
+        type: secondary
+        allow_notify: [client2]
+        primaries: ['127.0.0.1']
+      50.168.192.in-addr.arpa:
+        type: secondary
+        allow_notify: [client2]
+        primaries: ['127.0.0.1']
+      ddns.lab:
+        type: secondary
+        allow_notify: [client2]
+        allow_update_forwarding: [client1, client2]
+        primaries: ['127.0.0.1']
+  default:
+    zones:
+      dns.lab:
+        type: primary
+        allow_transfer: [ns01, ns02]
+        also_notify:
+          - '{{ hostvars["ns01"].ip }} key "client2-key"'
+          - '{{ hostvars["ns02"].ip }} key "client2-key"'
+        template: dns.lab
+      newdns.lab:
+        type: primary
+        allow_transfer: [ns01, ns02]
+        also_notify:
+          - '{{ hostvars["ns01"].ip }} key "client1-key"'
+          - '{{ hostvars["ns02"].ip }} key "client1-key"'
+        template: newdns.lab
+      50.168.192.in-addr.arpa:
+        type: primary
+        allow_transfer: [ns01, ns02]
+        also_notify:
+          - '{{ hostvars["ns01"].ip }} key "client1-key"'
+          - '{{ hostvars["ns01"].ip }} key "client2-key"'
+          - '{{ hostvars["ns02"].ip }} key "client1-key"'
+          - '{{ hostvars["ns02"].ip }} key "client2-key"'
+        template: 50.168.192.in-addr.arpa
+      ddns.lab:
+        type: primary
+        allow_transfer: [ns01, ns02]
+        allow_update: [client1, client2]
+        also_notify:
+          - '{{ hostvars["ns01"].ip }} key "client1-key"'
+          - '{{ hostvars["ns01"].ip }} key "client2-key"'
+          - '{{ hostvars["ns02"].ip }} key "client1-key"'
+          - '{{ hostvars["ns02"].ip }} key "client2-key"'
+        template: ddns.lab

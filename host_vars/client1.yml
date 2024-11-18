@@ -1,0 +1,7 @@
+---
+ip: '192.168.50.15'
+
+bind_profile:
+bind_client_keys: ['{{ inventory_hostname }}']
+bind_server_keys: []
+motd_profile: dns.lab

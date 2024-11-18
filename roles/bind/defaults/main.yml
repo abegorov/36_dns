@@ -1,18 +1,20 @@
 ---
-bind_profile: ''
-bind_listen_on: '127.0.0.1'
-bind_listen_on_v6: '::1'
+bind_profile: named
+bind_listen_on: []
+bind_listen_on_v6: []
 bind_allow_query: any
 bind_allow_transfer: none
 bind_allow_update: none
 bind_recursion: false
-bind_rndc_key: '{{ lookup("ansible.builtin.password",
-  "passwords/bind_rndc_key.txt", chars=["0123456789abcdef"], length=128) |
-  ansible.legacy.hex2b64 }}'
-bind_rndc_control: '127.0.0.1'
-bind_rndc_allow: none
-bind_zonetransfer_key: '{{ lookup("ansible.builtin.password",
-  "passwords/bind_zonetransfer_key.txt", chars=["hexdigits"], length=128) |
-  ansible.legacy.hex2b64 }}'
-bind_zonetransfer_servers: []
-bind_zones: {}
+bind_rndc_allow: []
+bind_rndc_control: []
+bind_rndc_key_template: sha512
+bind_client_keys: []
+bind_client_keys_template: sha512
+bind_server_keys: []
+bind_server_keys_template: sha512
+bind_servers: []
+bind_acls: {}
+bind_static_zone_templates: []
+bind_dynamic_zone_templates: []
+bind_views: {}

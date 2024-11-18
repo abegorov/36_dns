@@ -5,7 +5,7 @@
     dig @{{ hostvars["ns02"].ip }} -x {{ hostvars["ns01"].ip }}
 
 - nsupdate is available in the ddns.lab zone. Ex:
-    nsupdate -k /etc/named/zonetransfer.key
+    nsupdate -k /etc/named/{{ inventory_hostname }}.key
     server {{ hostvars["ns01"].ip }}
     zone ddns.lab
     update add www.ddns.lab. 60 A 192.168.50.15

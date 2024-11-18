@@ -1,7 +1,7 @@
 $TTL 3600
-$ORIGIN 50.168.192.in-addr.arpa.
-50.168.192.in-addr.arpa.  IN      SOA     ns01.dns.lab. root.dns.lab. (
-                            2024111800 ; serial
+$ORIGIN dns.lab.
+@               IN      SOA     ns01.dns.lab. root.dns.lab. (
+                            2024111801 ; serial
                             3600       ; refresh (1 hour)
                             600        ; retry (10 minutes)
                             86400      ; expire (1 day)
@@ -12,5 +12,8 @@ $ORIGIN 50.168.192.in-addr.arpa.
                 IN      NS      ns02.dns.lab.
 
 ; DNS Servers
-10              IN      PTR     ns01.dns.lab.
-11              IN      PTR     ns02.dns.lab.
+ns01            IN      A       {{ hostvars["ns01"].ip }}
+ns02            IN      A       {{ hostvars["ns02"].ip }}
+
+; Web Servers
+web1            IN      A       {{ hostvars["client1"].ip }}
